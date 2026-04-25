@@ -2,6 +2,7 @@ import express from 'express';
 import {ENV} from './config/env';
 import { clerkMiddleware } from '@clerk/express'
 import cors from 'cors';
+import {User } from './db/schema';
 
 
 const app = express();
