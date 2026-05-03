@@ -8,7 +8,10 @@ export const users = pgTable("users", {
     name: text("name"),
     imageUrl: text("image_url"),
     createdAt: timestamp("created_at", {mode: "date"}).notNull().defaultNow(),
-    updatedAt: timestamp("updated_at", {mode: "date"}).notNull().defaultNow()
+    updatedAt: timestamp("updated_at", {mode: "date"})
+    .notNull()
+    .defaultNow()
+    .$onUpdate(()=> new Date()),
 })
 //tocreatetimestamp, do timestamp1: timestamp("timestamp").notNull().default()
 //or check https://orm.drizzle.team/docs/guides/timestamp-default-value
@@ -31,7 +34,6 @@ export const comments = pgTable("comments", {
     userId: text("user_id").notNull().references(()=> users.id, {onDelete: "cascade"}),
     productId: uuid("product_id").notNull().references(()=>products.id, {onDelete: "cascade"}),
     createdAt: timestamp("created_at", {mode: "date"}).notNull().defaultNow(),
-
 })
 
 // for my own understanding, feel free to read this for understanding

@@ -11,12 +11,24 @@ export const getUserById = async (id: string) => {
     return await db.query.users.findFirst({where: eq(users.id, id)}); //await
 }
 
-export const updateUser = async (id: string, data: Partial<NewUser>)  => {};
+export const updateUser = async (id: string, data: Partial<NewUser>)  => {
+    const existingUser = await getUserById(id);
+    if(!existingUser) {throw new Error(`User with id ${id} not found`);}
+    const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning(); //await
+    return user;
+};
 
 export const upsertUser = async (data: NewUser) => {
-    const existingUser = await getUserById(data.id);
-    if(existingUser) return updateUser(data.id, data);
-    return createUser(data);
+    // const existingUser = await getUserById(data.id);
+    // if(existingUser) return updateUser(data.id, data);
+    // return createUser(data); instead do
+    const [user] = await db.insert(users)
+    .values(data)
+    .onConflictDoUpdate({
+        target: users.id,
+        set:data,
+    }).returning();
+    return user;
 }
 
 export const createProduct = async (data:NewProduct) => {
@@ -53,14 +65,21 @@ export const getProductsByUserId = async (userId: string) => {
             user: true,
         },
         orderBy: (products, {desc})=>desc(products.createdAt)
-    })
+    });
 };
 
 export const updateProduct = async(id: string, data: Partial<NewProduct>)=>{
-
+    const existingProduct = await db.getProductById(id);
+    if(!existingProdcut){
+        throw new Error(`Product with id ${id} not found`);
+    }
+    const [product] = await db.update(products).set(data).where(eq(products.id, id)).returning();
+    return product;
 };
 
 export const deleteProduct = async (id: string) =>{
+    const existingProduct = await getProductById(id);
+    if(!existingProduct) {throw new Error(`Product with id ${id} not found`);}
     const [product] = await db.delete(products).where(eq(products.id, id)).returning();
     return product;
 };
@@ -70,7 +89,11 @@ export const createComment = async (data: NewComment) => {
     return comment;
 };
 
+
+
 export const deleteComment = async (id: string) => {
+    const existingComment = await getCommentById(id);
+    if(!existingComment){throw new Error(`Comment with id ${id} not found`);}
     const [comment] = await db.delete(comments).where(eq(comments.id, id)).returning();
     return comment;
 };
@@ -79,5 +102,5 @@ export const getCommentById = async (id: string) => {
     return db.query.comments.findFirst({
         where: eq(comments.id, id),
         with: {user: true},
-})
-}
+});
+};
