@@ -8,7 +8,7 @@ import productRoutes from './routes/productRoutes';
 import commentRoutes from './routes/commentsRoutes';
 
 const app = express();
-const PORT: Number =  5000;
+const PORT: Number =  ENV.PORT ? parseInt(ENV.PORT) : 5000;
 
 app.use(cors({origin: ENV.FRONTEND_URL }))
 

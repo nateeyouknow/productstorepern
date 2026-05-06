@@ -18,6 +18,7 @@ router.post("/", requireAuth, productController.createProduct);
 // put 
 router.put("/:id", requireAuth, productController.updateProduct);
 
+router.delete("/:id", requireAuth, productController.deleteProduct);
 export default router;
 
  

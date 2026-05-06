@@ -24,14 +24,14 @@ export const getMyProducts = async (req: Request, res: Response) => {
     }
     catch(error){
         console.error("Error getting user products: ", error);
-        res.staus(500).json({error: "Failed to get user products"});
+        res.status(500).json({error: "Failed to get user products"});
     }
 }
 
 export const getProductById = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params;
-        const product = await queries.getProductBy(id);
+        const {id} = req.params as {id: string};
+        const product = await queries.getProductById(id);
 
         if(!product) return res.status(404).json({error: "Product not Found"} );
         res.status(200).json(product);
@@ -75,7 +75,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         const {userId} = getAuth(req);
         if (!userId) return res.status(401).json({error: "Unauthorised" });
 
-        const {id } = req.params;
+        const {id } = req.params as {id: string};
         const {title, description, imageUrl} = req.body;
 
         const existingProduct = await queries.getProductById(id);
@@ -104,7 +104,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     try{
         const {userId} = getAuth(req);
         if(!userId) {
-            return res.stauts(401).json({error: "Unauthorised"});
+            return res.status(401).json({error: "Unauthorised"});
         }   
         const {id} = req.params;
 
