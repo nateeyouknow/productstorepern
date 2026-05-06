@@ -31,7 +31,7 @@ export const getMyProducts = async (req: Request, res: Response) => {
 export const getProductById = async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
-        const product = await queries.getProductBy(id);
+        const product = await queries.getProductById(id);
 
         if(!product) return res.status(404).json({error: "Product not Found"} );
         res.status(200).json(product);
