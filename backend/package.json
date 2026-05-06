@@ -7,9 +7,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "ara": "nodemon",
-    "db:push": "drizzle-kit push",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "db:push": "drizzle-kit push"
   },
   "keywords": [],
   "author": "",
