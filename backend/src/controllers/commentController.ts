@@ -8,7 +8,7 @@ export const createComment = async (req: Request, res: Response) => {
         const {userId} = getAuth(req);
         if (!userId) {return res.status(401).json({error: "Unauthorised"});}
 
-        let {productId} = req.params as {productId: string};
+        const {productId} = req.params as {productId: string};
         const {content} = req.body;
 
         if (!content) {return res.status(400).json({error: "Comment content is required"});}
