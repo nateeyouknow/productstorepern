@@ -11,7 +11,7 @@ function Navbar() {
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost gap-2">
         <ShoppingBagIcon className="size-5 text-primary" />
-        <span className="text-lg font-bold font-mono uppercase -tracking-wider">Productify</span>
+        <span className="text-lg font-bold font-mono uppercase tracking-wider">Productify</span>
         </Link>
       </div>
 
@@ -43,4 +43,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default Navbar;

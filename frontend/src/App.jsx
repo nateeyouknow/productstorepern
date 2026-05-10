@@ -1,5 +1,5 @@
 import {Show, SignInButton, SignOutButton, useAuth} from '@clerk/react';
-
+// import {useQuery} from "@tanstack/react-query";
 import Navbar from "./components/Navbar";
 import ProductPage from './pages/ProductPage';
 import EditProductPage from './pages/EditProductPage';
@@ -7,7 +7,10 @@ import CreatePage from './pages/CreatePage';
 import HomePage from './pages/HomePage';
 import ProfilePage from "./pages/ProfilePage";
 import {Routes, Route} from 'react-router';
+
 export default function App(){
+// const {data, isError, isLoading, refetch} = useQuery({queryKey: ['myData'], queryFn: () => fetchData()});
+
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar />
