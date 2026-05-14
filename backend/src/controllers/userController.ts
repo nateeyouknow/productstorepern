@@ -24,6 +24,11 @@ export async function syncUser(req:Request, res:Response){
         }
     catch(error){
                 console.error("Error syncing user:", error);
+        // Log more details for debugging
+        if (error instanceof Error) {
+            console.error("Error message:", error.message);
+            console.error("Error stack:", error.stack);
+        }
         return res.status(500).json({error: "Failed to sync user"});
     }
 }

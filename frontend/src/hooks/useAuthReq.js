@@ -12,20 +12,23 @@ const useAuthReq = () => {
         if(isInterceptorRegistered) return;
         isInterceptorRegistered = true;
         
-    const interceptor=  api.interceptors.request.use(async(config) => {
+    const interceptor=  api.interceptors.request.use(async (config) => {
         if(isSignedIn){
         const token = getToken();
         if(token){
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = `Bearer ${token}`;
                 }
             }
         return config;
     });
 
-    return () => {api.interceptors.request.eject(interceptor);}, 
-    [isSignedIn, getToken]});
+    return () => {
+        api.interceptors.request.eject(interceptor);
+        isInterceptorRegistered = false;
+    };
+},  [isSignedIn, getToken]);
 
-    return {isSignedIn, isClerkLoaded: isLoaded};
+    return {isSignedIn, isCllerkLoaded: isLoaded};
 }
 
 export default useAuthReq;
