@@ -4,7 +4,7 @@ import {
 
 export const useProducts = () => {
     console.log("Still executing this function");
-  const result = useQuery({ queryKey: ["products"], queryFn: getAllProducts });
+  (async ()=>{const result = await useQuery({ queryKey: ["products"], queryFn: getAllProducts });})().then(()=>{console.log("Done executing this function")});
   return result;
 };
 
