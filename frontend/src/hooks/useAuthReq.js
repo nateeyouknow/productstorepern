@@ -14,7 +14,7 @@ const useAuthReq = () => {
         
     const interceptor=  api.interceptors.request.use(async (config) => {
         if(isSignedIn){
-        const token = getToken();
+        const token = await getToken();
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
                 }
@@ -28,7 +28,7 @@ const useAuthReq = () => {
     };
 },  [isSignedIn, getToken]);
 
-    return {isSignedIn, isCllerkLoaded: isLoaded};
+    return {isSignedIn, isClerkLoaded: isLoaded};
 }
 
 export default useAuthReq;

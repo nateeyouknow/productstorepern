@@ -1,27 +1,49 @@
-import {useQuery,useMutation } from "@tanstack/react-query";
-import {deleteProduct, getAllProducts, createProduct, getProductById} from "../lib/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createProduct,  deleteProduct,  getAllProducts,  getMyProducts,  getProductById,  updateProduct} from "../lib/api";
 
 export const useProducts = () => {
-    const result= useQuery({queryKey: ["products"], queryFn: getAllProducts });
-    return result;
-
-}
+    console.log("Still executing this function");
+  const result = useQuery({ queryKey: ["products"], queryFn: getAllProducts });
+  return result;
+};
 
 export const useCreateProduct = () => {
-    return useMutation({mutationFn: createProduct})
-}
-
+  return useMutation({ mutationFn: createProduct });
+};
 
 export const useProduct = (id) => {
-    return useQuery({
-        queryKey: ["product", id],
-        queryFn: ()=> getProductById(id),
-        enabled: !!id,
-    });
-
-}
-
+  return useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductById(id),
+    enabled: !!id,
+  });
+};
 
 export const useDeleteProduct = () => {
-    return useMutation({mutationFn: deleteProduct})
-}
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+    },
+  });
+};
+
+export const useMyProducts = () => {
+  return useQuery({ queryKey: ["myProducts"], queryFn: getMyProducts });
+};
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateProduct,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+    },
+  });
+};

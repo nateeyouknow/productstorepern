@@ -1,48 +1,42 @@
-import {ArrowLeftIcon, EditIcon, Trash2Icon, CalendarIcon, UserIcon} from "lucide-react";
+import { ArrowLeftIcon, EditIcon, Trash2Icon, CalendarIcon, UserIcon } from "lucide-react";
 import LoadingSpinner from "../components/LoadingSpinner";
-import {createProduct, getAllProducts, getProductById} from "../lib/api";
 import CommentsSection from "../components/CommentsSection";
-import  {useAuth } from "@clerk/react";
-import {useProduct, useDeleteProduct} from "../hooks/useProducts";
-import {useParams, Link, useNavigate} from "react-router";
-
-
+import { useAuth } from "@clerk/react";
+import { useProduct, useDeleteProduct } from "../hooks/useProducts";
+import { useParams, Link, useNavigate } from "react-router";
 
 function ProductPage() {
-  const {id} = useParams();
-  const {userId} = useAuth();
+  const { id } = useParams();
+  const { userId } = useAuth();
   const navigate = useNavigate();
-  
-  const {data: product, isLoading, error} = useProduct(id);
+
+  const { data: product, isLoading, error } = useProduct(id);
   const deleteProduct = useDeleteProduct();
 
   const handleDelete = () => {
+    if (confirm("Delete this product permanently?")) {
+      deleteProduct.mutate(id, { onSuccess: () => navigate("/") });
+    }
+  };
+
+  if (isLoading) return <LoadingSpinner />;
+
+  if (error || !product) {
     return (
       <div className="card bg-base-300 max-w-md mx-auto">
         <div className="card-body items-center text-center">
-
-        </div>
-      </div>
-    )
-  };
-
-  if(error||!product){
-    return (
-      <div className="card bg-base-300 max-w-md mx-auto">
-        <div className="card-body items-ceter text-center">
-          <h2 className="cared-title text-error">Product Not Found</h2>
+          <h2 className="card-title text-error">Product not found</h2>
           <Link to="/" className="btn btn-primary btn-sm">
             Go Home
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   const isOwner = userId === product.userId;
-  
 
-    return (
+  return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <Link to="/" className="btn btn-ghost btn-sm gap-1">
@@ -130,4 +124,4 @@ function ProductPage() {
   );
 }
 
-export default ProductPage
+export default ProductPage;
