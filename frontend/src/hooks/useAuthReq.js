@@ -1,18 +1,20 @@
 import {useAuth} from "@clerk/react";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import api from "../lib/axios";
 
-let isInterceptorRegistered = false;
+// let isInterceptorRegistered = false; 1
 
 const useAuthReq = () => {
-  
+    const interceptorIdRef = useRef(null);
     const { isSignedIn, getToken, isLoaded } = useAuth();
 
     useEffect(()=>{
-        if(isInterceptorRegistered) return;
-        isInterceptorRegistered = true;
+        // if(isInterceptorRegistered) return; 1
+        // isInterceptorRegistered = true; 1
+        if(interceptorIdRef.current!==null) return;
+    // const interceptor=  api.interceptors.request.use(async (config) => {
         
-    const interceptor=  api.interceptors.request.use(async (config) => {
+        interceptorIdRef.current = api.interceptors.request.use(async (config)=>{
         if(isSignedIn){
         const token = await getToken();
         if(token){
@@ -23,10 +25,14 @@ const useAuthReq = () => {
     });
 
     return () => {
-        api.interceptors.request.eject(interceptor);
-        isInterceptorRegistered = false;
+        // api.interceptors.request.eject(interceptor);
+        // isInterceptorRegistered = false;
+        if(interceptorIdRef.current!==null){
+            api.interceptors.request.eject(interceptorIdRef.current);
+            interceptorIdRef.current = null;
+        }
     };
-},  [isSignedIn, getToken]);
+},  [/*{isSignedIn, }*/getToken]);
 
     return {isSignedIn, isClerkLoaded: isLoaded};
 }

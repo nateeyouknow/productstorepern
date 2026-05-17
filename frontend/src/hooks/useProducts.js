@@ -4,11 +4,12 @@ import {
 
 export const useProducts = () => {
     console.log("Still executing this function");
-  (async ()=>{const result = await useQuery({ queryKey: ["products"], queryFn: getAllProducts });})().then(()=>{console.log("Done executing this function")});
+  const result = useQuery({ queryKey: ["products"], queryFn: getAllProducts })
   return result;
 };
 
 export const useCreateProduct = () => {
+    console.log("Creating product")
   return useMutation({ mutationFn: createProduct });
 };
 

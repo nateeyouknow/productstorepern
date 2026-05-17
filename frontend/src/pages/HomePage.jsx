@@ -6,7 +6,7 @@ import ProductCard from "../components/ProductCard";
 import { SignInButton } from "@clerk/react";
 
 function HomePage() {
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products = [], isLoading, error } = useProducts();
 
   if (isLoading) return <LoadingSpinner />;
 
